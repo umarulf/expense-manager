@@ -55,4 +55,3 @@ export function getTotal(transaction){
     return _.sum(getSum(transaction));
 }
 
-// og

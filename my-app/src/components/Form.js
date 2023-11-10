@@ -37,7 +37,7 @@ export default function Form() {
 
                 </div>
                 <div className="submit-btn">
-                    <button className='border py-2 text-white bg-indigo-500 w-full'>Make Transaction</button>
+                    <button className='border py-2 text-white bg-green-400 w-full hover:bg-emerald-500 rounded-md'>Make Transaction</button>
                 </div>
             </div>    
         </form>
@@ -46,5 +46,3 @@ export default function Form() {
     </div>
   )
 }
-
-// og

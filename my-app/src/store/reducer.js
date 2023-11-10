@@ -10,7 +10,6 @@ export const expenseSlice = createSlice({
     initialState,
     reducers : {
         getTransactions: (state) => {
-                // get code
         }
     }
 })
@@ -18,4 +17,3 @@ export const expenseSlice = createSlice({
 export const { getTransactions } = expenseSlice.actions; 
 export default expenseSlice.reducer;
 
-// og
