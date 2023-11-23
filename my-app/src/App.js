@@ -1,22 +1,22 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Graph from './components/Graph';
-import Form from './components/Form';
-
+import AppPage from './pages/AppPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+ 
 function App() {
   return (
-  <div className="App">
-    <div className="container mx-auto max-w-6xl text-center drop-shadow-lg text-gray-800">
-      <h1 className="text-4xl py-8 mb-10 bg-teal-600 text-white rounded-md">Expense Manager</h1>
-
-  
-      <div className="grid md:grid-cols-2 gap-4">
-        <Form></Form>
-          <Graph></Graph>
-          
+    <Router>
+      <div className="App  ">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/app" element={<AppPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
       </div>
-    </div>
-  </div>
+    </Router>
   );
 }
-
+ 
 export default App;
+
