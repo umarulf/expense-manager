@@ -31,7 +31,7 @@ const LoginPage = () => {
       });
   
       const responseData = await response.json();
-      console.log('Response data:', responseData);
+      console.log('Response data of login:', responseData);
 
       if (!response.ok) {
        

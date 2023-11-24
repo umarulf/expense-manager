@@ -19,6 +19,7 @@ export default function Graph() {
     graphData = <div>Fetching</div>;
   } else if (isSuccess) {
     graphData = <Doughnut {...chart_Data(data)}></Doughnut>;
+    console.log(data);
   } else if (isError) {
     graphData = <div>Error</div>;
   }

@@ -10,7 +10,7 @@ function AppPage() {
   const [name, setName] = useState('');
 
   const handleLogout = () => {
-    localStorage.removeItem('userName');
+    localStorage.removeItem('name');
     navigate('/'); 
     window.location.reload();   
   };

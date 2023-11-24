@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import List from './List';
 import { default as api } from '../store/apiSlice';
 
+
 export default function Form() {
   const { register, handleSubmit, resetField } = useForm();
   const [addTransaction] = api.useAddTransactionMutation();
@@ -21,7 +22,7 @@ export default function Form() {
       userId: parseInt(userId, 10), 
     };
 
-    await addTransaction({ ...transactionData, userId }).unwrap();
+    await addTransaction({ ...transactionData }).unwrap();                                                                                                        
     resetField('name');
     resetField('amount');
     resetField('date');
@@ -58,3 +59,16 @@ export default function Form() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+ //24
