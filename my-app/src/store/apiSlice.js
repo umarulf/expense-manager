@@ -1,60 +1,58 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseURI = 'http://localhost:8080';
+const baseURI = "http://localhost:8080";
 
 export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: baseURI }),
   endpoints: (builder) => ({
-  
     getLabels: builder.query({
       query: () => {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem("userId");
 
         if (!userId) {
-          console.error('User ID not found in local storage.');
+          console.error("User ID not found in local storage.");
           return;
         }
 
         return `/v1/transaction/list?userId=${userId}`;
       },
-      providesTags: ['transaction'],
+      providesTags: ["transaction"],
     }),
 
     addTransaction: builder.mutation({
       query: (transactionData) => {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem("userId");
 
         if (!userId) {
-          console.error('User ID not found in local storage.');
+          console.error("User ID not found in local storage.");
           return;
         }
 
         return {
           url: `/v1/transaction?userId=${userId}`,
-          method: 'POST',
+          method: "POST",
           body: transactionData,
         };
       },
-      invalidatesTags: ['transaction'],
+      invalidatesTags: ["transaction"],
     }),
 
     deleteTransaction: builder.mutation({
       query: (recordId) => {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem("userId");
 
         if (!userId) {
-          console.error('User ID not found in local storage.');
+          console.error("User ID not found in local storage.");
           return;
         }
 
         return {
           url: `/v1/transaction/${recordId}?userId=${userId}`,
-          method: 'DELETE',
+          method: "DELETE",
         };
       },
-      invalidatesTags: ['transaction'],
+      invalidatesTags: ["transaction"],
     }),
-
   }),
 });
 

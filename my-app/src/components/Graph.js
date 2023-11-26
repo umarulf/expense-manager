@@ -1,17 +1,15 @@
-
-import React from 'react'
-import { Doughnut } from 'react-chartjs-2';
-import {Chart, ArcElement} from 'chart.js'
-import Labels from './Labels';
-import { chart_Data, getTotal } from '../helper/helper'
-import {default as api} from '../store/apiSlice';
- 
+import React from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Chart, ArcElement } from "chart.js";
+import Labels from "./Labels";
+import { chart_Data, getTotal } from "../helper/helper";
+import { default as api } from "../store/apiSlice";
 Chart.register(ArcElement);
- 
 
 export default function Graph() {
-  const userId = localStorage.getItem('userId'); 
-  const { data, isFetching, isSuccess, isError } = api.useGetLabelsQuery(userId); 
+  const userId = localStorage.getItem("userId");
+  const { data, isFetching, isSuccess, isError } =
+    api.useGetLabelsQuery(userId);
 
   let graphData;
 
@@ -29,18 +27,18 @@ export default function Graph() {
       <div className="item">
         <div className="chart relative">
           {graphData}
-          <h3 className='mb-4 font-bold title'>Total
-            <span className='block text-3xl text-cyan-100'>${getTotal(data) ?? 0}</span>
+          <h3 className="mb-4 font-bold title">
+            Total
+            <span className="block text-3xl text-cyan-100">
+              ${getTotal(data) ?? 0}
+            </span>
           </h3>
         </div>
 
         <div className="flex flex-col pt-3 gap-4">
-         
           <Labels></Labels>
         </div>
       </div>
     </div>
   );
 }
-
-

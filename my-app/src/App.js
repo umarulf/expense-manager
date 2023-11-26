@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
-import AppPage from './pages/AppPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
- 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import AppPage from "./pages/AppPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+
 function App() {
   return (
     <Router>
@@ -17,6 +17,5 @@ function App() {
     </Router>
   );
 }
- 
-export default App;
 
+export default App;

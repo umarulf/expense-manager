@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Graph from "../components/Graph";
 import Form from "../components/Form";
-import './AppPage.css';
+import "./AppPage.css";
 
 function AppPage() {
-
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   const handleLogout = () => {
-    localStorage.removeItem('name');
-    navigate('/'); 
-    window.location.reload();   
+    localStorage.removeItem("name");
+    navigate("/");
+    window.location.reload();
   };
 
- useEffect(() => {
- const storedName = localStorage.getItem('name');
+  useEffect(() => {
+    const storedName = localStorage.getItem("name");
     if (storedName) {
       setName(storedName);
     }
@@ -31,25 +30,22 @@ function AppPage() {
 
         {name && <p className="user-name">Welcome, {name}!</p>}
         <div className="logout-button">
-        
-            <button onClick={handleLogout} className="border py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded-md">
-              Logout
-            </button>
-          
+          <button
+            onClick={handleLogout}
+            className="border py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded-md"
+          >
+            Logout
+          </button>
         </div>
 
         <div className=" grid grid-cols-1 gap-4">
           <Form></Form>
- 
-          <Graph></Graph>
 
+          <Graph></Graph>
         </div>
       </div>
     </div>
   );
-  
 }
 
 export default AppPage;
-
-
