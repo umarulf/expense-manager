@@ -1,31 +1,41 @@
 import React from "react";
 import { default as api } from "../store/apiSlice";
-import { getLabels } from "../helper/helper";
+import { getLabels, getSum } from "../helper/helper";
 
 export default function Labels() {
   const { data, isFetching, isSuccess, isError } = api.useGetLabelsQuery();
 
   let Transactions;
+  const totalAmounts = getSum(data?.transactions, "type");
+
+  const extractedTotals = totalAmounts.map((item) => item.total);
+  console.log("Extracted Totals:", extractedTotals);
 
   if (isFetching) {
     Transactions = <div>Fetching</div>;
   } else if (isSuccess) {
-    Transactions = getLabels(data, "type").map((v, i) => (
-      <LabelComponent key={i} data={v}></LabelComponent>
+    Transactions = getLabels(data?.transactions, "type").map((v, i) => (
+      <LabelComponent
+        extractedTotals={extractedTotals[i]}
+        key={i}
+        data={v}
+      ></LabelComponent>
     ));
   } else if (isError) {
     Transactions = <div>Error</div>;
   }
 
   return (
-    <div className="flex flex-col pt-2 pb-20 gap-2">
-      <h1 className=" font-bold text-xl">Overview</h1>
-      {Transactions}
-    </div>
+    <>
+      <div className="flex flex-col pt-2 pb-20 gap-2">
+        <h1 className=" font-bold text-xl">Overview</h1>
+        {Transactions}
+      </div>
+    </>
   );
 }
 
-function LabelComponent({ data }) {
+function LabelComponent({ data, extractedTotals }) {
   if (!data) return <></>;
   return (
     <div className="labels flex justify-between">
@@ -36,7 +46,10 @@ function LabelComponent({ data }) {
         ></div>
         <h3 className="text-md">{data.type ?? ""}</h3>
       </div>
-      <h3 className="font-bold">{Math.round(data.percent) ?? 0}%</h3>
+      <div className="flex gap-6  ">
+        <h3 className="font-bold">{Math.round(data.percent) ?? 0}%</h3>
+        <h3 className="min-w-[50px] font-bold">{extractedTotals}$</h3>
+      </div>
     </div>
   );
 }

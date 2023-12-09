@@ -7,12 +7,37 @@ const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const handlePasswordChange = (value) => {
+    const strength = checkPasswordStrength(value);
+    setPasswordStrength(strength);
+  };
+
+  const checkPasswordStrength = (password) => {
+    if (password.length < 8) {
+      return "Weak";
+    } else if (password.length < 12) {
+      return "Moderate";
+    } else {
+      return "Strong";
+    }
+  };
 
   const handleSignup = async (event) => {
     event.preventDefault();
 
-    if (name.trim() === "" || email.trim() === "" || password.trim() === "") {
-      console.error("All fields must be filled out!");
+    if (
+      name.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === "" ||
+      passwordStrength === "Weak"
+    ) {
+      setErrorMessage(
+        "All fields must be filled out, and the password must be strong enough."
+      );
       return;
     }
 
@@ -81,15 +106,43 @@ const SignupPage = () => {
                 type="password"
                 placeholder="Create a password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordTouched(true);
+                  handlePasswordChange(e.target.value);
+                }}
                 className="signup-input"
                 required
               />
+              {passwordTouched && (
+                <p
+                  className={`password-strength ${
+                    passwordStrength === "Weak"
+                      ? "text-red-500"
+                      : passwordStrength === "Moderate"
+                      ? "text-yellow-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  Password Strength: {passwordStrength}
+                </p>
+              )}
             </label>
-            <button type="submit" className="signup-button">
+            <button
+              type="submit"
+              className={`signup-button ${
+                passwordStrength === "Weak"
+                  ? "bg-red-500"
+                  : passwordStrength === "Moderate"
+                  ? "bg-yellow-500"
+                  : "bg-green-500"
+              }`}
+              disabled={passwordStrength === "Weak"}
+            >
               Sign up
             </button>
           </form>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
 
         <p className="login-link">

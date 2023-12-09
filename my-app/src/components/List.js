@@ -1,24 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "boxicons";
 import { default as api } from "../store/apiSlice";
 
 export default function List() {
-  const { data, isFetching, isSuccess, isError } = api.useGetLabelsQuery();
+  const pageData = {
+    pageNumber: 0,
+    pageSize: 3,
+  };
+  const { data, isFetching, isSuccess, isError } =
+    api.useGetLabelsQuery(pageData);
+  console.log(data);
   const [deleteTransaction] = api.useDeleteTransactionMutation();
-
-  let Transactions;
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const handlerClick = (id) => {
     if (!id) return 0;
     deleteTransaction(id);
   };
 
+  let filteredTransactions = data?.transactions;
+
+  if (startDate && endDate) {
+    filteredTransactions = data.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      return transactionDate >= startDate && transactionDate <= endDate;
+    });
+  }
+
+  let Transactions;
+
   if (isFetching) {
     Transactions = <div>Fetching</div>;
   } else if (isSuccess) {
-    Transactions = data.map((v, i) => (
-      <Transaction key={i} category={v} handler={handlerClick}></Transaction>
-    ));
+    Transactions =
+      filteredTransactions.length > 0 ? (
+        filteredTransactions.map((v, i) => (
+          <Transaction
+            key={i}
+            category={v}
+            handler={handlerClick}
+          ></Transaction>
+        ))
+      ) : (
+        <div className="text-red-500 font-bold">
+          No transactions found for the selected date range.
+        </div>
+      );
   } else if (isError) {
     Transactions = <div>Error</div>;
   }
@@ -29,6 +59,29 @@ export default function List() {
         My Expenditures{" "}
         <box-icon type="solid" color="grey" name="hand-down"></box-icon>{" "}
       </h1>
+
+      {/* Date Range Picker */}
+      <div className="pl-36 flex gap-4 mb-4">
+        <DatePicker
+          className="border rounded px-2 py-1"
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          placeholderText="Select start date"
+        />
+        <DatePicker
+          className="border rounded px-2 py-1"
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          placeholderText="Filter by end date"
+        />
+      </div>
+
       <thead>
         <tr>
           <th
@@ -98,9 +151,7 @@ function Transaction({ category, handler }) {
               <td className="px-4 py-2 w-[154px] overflow-hidden overflow-ellipsis whitespace-nowrap">
                 {type}
               </td>
-              <td className="px-4 py-2 w-[120px] overflow-hidden overflow-ellipsis whitespace-nowrap">
-                {date}
-              </td>
+              <td className="px-4 py-2 w-[120px]  whitespace-nowrap">{date}</td>
               <td className="px-4 py-2 w-[143px] overflow-hidden overflow-ellipsis whitespace-nowrap">
                 {formatCurrency(amount)}
               </td>

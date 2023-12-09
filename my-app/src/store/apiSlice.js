@@ -6,15 +6,18 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: baseURI }),
   endpoints: (builder) => ({
     getLabels: builder.query({
-      query: () => {
+      query: (pageData) => {
         const userId = localStorage.getItem("userId");
-
         if (!userId) {
           console.error("User ID not found in local storage.");
           return;
         }
 
-        return `/v1/transaction/list?userId=${userId}`;
+        return {
+          url: `/v1/transaction/list?userId=${userId}`,
+          method: "POST",
+          body: pageData,
+        };
       },
       providesTags: ["transaction"],
     }),
