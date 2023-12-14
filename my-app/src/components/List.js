@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "boxicons";
 import { default as api } from "../store/apiSlice";
+import ReactPaginate from "react-paginate";
+import "./ReactPaginate.css";
 
 export default function List() {
-  const pageData = {
-    pageNumber: 0,
-    pageSize: 3,
-  };
-  const { data, isFetching, isSuccess, isError } =
-    api.useGetLabelsQuery(pageData);
-  console.log(data);
+  const pageSize = 3;
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageCount, setPageCount] = useState(10);
+
+  const { data, isFetching, isSuccess, isError } = api.useGetLabelsQuery({
+    pageSize,
+    pageNumber,
+  });
+
+  useEffect(() => {
+    setPageCount(Math.ceil(data?.totalTransactions / pageSize));
+  }, [pageNumber, data]);
+
+  console.log("ogdata1", data?.totalTransactions);
+
+  console.log("ogdata2", data?.transactions);
+
   const [deleteTransaction] = api.useDeleteTransactionMutation();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const handlePageChange = (data) => {
+    const { selected } = data;
+    setPageNumber(selected);
+  };
 
   const handlerClick = (id) => {
     if (!id) return 0;
@@ -22,9 +39,10 @@ export default function List() {
   };
 
   let filteredTransactions = data?.transactions;
+  console.log(filteredTransactions, "filter");
 
   if (startDate && endDate) {
-    filteredTransactions = data.filter((transaction) => {
+    filteredTransactions = filteredTransactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date);
       return transactionDate >= startDate && transactionDate <= endDate;
     });
@@ -50,7 +68,7 @@ export default function List() {
         </div>
       );
   } else if (isError) {
-    Transactions = <div>Error</div>;
+    Transactions = <div>Errorlist</div>;
   }
 
   return (
@@ -112,6 +130,31 @@ export default function List() {
       </thead>
 
       {Transactions}
+
+      <div className=" flex">
+        <ReactPaginate
+          previousLabel={"← Previous"}
+          nextLabel={"Next →"}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          forcePage={pageNumber}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={3}
+          containerClassName={
+            "pagination flex justify-center mx-auto list-none gap-6 mt-8 mb-6"
+          }
+          previousLinkClassName={
+            "pagination__link text-black px-3 py-2 rounded-full"
+          }
+          nextLinkClassName={
+            "pagination__link text-black px-3 py-2 rounded-full"
+          }
+          disabledClassName={"pagination__link--disabled "}
+          activeClassName={
+            "pagination__link--active text-white w-5 text-center bg-yellow-700"
+          }
+        />
+      </div>
     </div>
   );
 }

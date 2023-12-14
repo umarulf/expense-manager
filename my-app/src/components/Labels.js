@@ -3,7 +3,14 @@ import { default as api } from "../store/apiSlice";
 import { getLabels, getSum } from "../helper/helper";
 
 export default function Labels() {
-  const { data, isFetching, isSuccess, isError } = api.useGetLabelsQuery();
+  const pageData = {
+    pageNumber: 0,
+    pageSize: 100,
+  };
+  const { data, isFetching, isSuccess, isError } =
+    api.useGetLabelsQuery(pageData);
+
+  console.log("ogdata", data);
 
   let Transactions;
   const totalAmounts = getSum(data?.transactions, "type");
@@ -22,7 +29,7 @@ export default function Labels() {
       ></LabelComponent>
     ));
   } else if (isError) {
-    Transactions = <div>Error</div>;
+    Transactions = <div>Errorlabel</div>;
   }
 
   return (

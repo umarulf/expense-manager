@@ -7,19 +7,24 @@ import { default as api } from "../store/apiSlice";
 Chart.register(ArcElement);
 
 export default function Graph() {
-  const userId = localStorage.getItem("userId");
+  const pageData = {
+    pageNumber: 0,
+    pageSize: 100,
+  };
+  // const userId = localStorage.getItem();
   const { data, isFetching, isSuccess, isError } =
-    api.useGetLabelsQuery(userId);
+    api.useGetLabelsQuery(pageData);
+
 
   let graphData;
 
   if (isFetching) {
     graphData = <div>Fetching</div>;
   } else if (isSuccess) {
-    graphData = <Doughnut {...chart_Data(data)}></Doughnut>;
+    graphData = <Doughnut {...chart_Data(data?.transactions)}></Doughnut>;
     console.log(data);
   } else if (isError) {
-    graphData = <div>Error</div>;
+    graphData = <div>Errorgraph</div>;
   }
 
   return (
@@ -30,7 +35,7 @@ export default function Graph() {
           <h3 className="mb-4 font-bold title">
             Total
             <span className="block text-3xl text-cyan-100">
-              ${getTotal(data) ?? 0}
+              ${getTotal(data?.transactions) ?? 0}
             </span>
           </h3>
         </div>

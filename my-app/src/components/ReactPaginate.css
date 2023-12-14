@@ -1,0 +1,20 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Adjust pagination styles as needed */
+.ReactPaginate {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Add any additional styling based on your needs */
+.ReactPaginate li {
+  margin: 0 5px;
+  cursor: pointer;
+}
